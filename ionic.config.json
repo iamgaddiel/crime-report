@@ -1,0 +1,7 @@
+{
+  "name": "crime report",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
