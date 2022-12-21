@@ -22,25 +22,44 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import CrimeContextProvider, { CrimeContext } from './contexts/CrimeContextProvider';
+import MissingPersonProvider from './contexts/MissingPersonProvider';
+import MissingPersonDetail from './pages/MissingPersonDetail';
+import ReportMissingPerson from './pages/ReportMissingPerson';
+import ReportCrime from './pages/ReportCrime';
+import CrimeDetail from './pages/CrimeDetail';
 
 setupIonicReact();
 
 const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/" exact={true}>
-          <Redirect to="/home" />
-        </Route>
-        <Route path="/home" exact={true}>
-          <Home />
-        </Route>
-        <Route path="/message/:id">
-           <ViewMessage />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+  <CrimeContextProvider>
+    <MissingPersonProvider>
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route path="/" exact={true}>
+              <Redirect to="/home" />
+            </Route>
+            <Route path="/home" exact={true}>
+              <Home />
+            </Route>
+            <Route path="/person/:id">
+              <MissingPersonDetail />
+            </Route>
+            <Route path="/crime/:id">
+              <CrimeDetail />
+            </Route>
+            <Route path="/add/person/">
+              <ReportMissingPerson />
+            </Route>
+            <Route path="/add/crime/">
+              <ReportCrime />
+            </Route>
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
+    </MissingPersonProvider>
+  </CrimeContextProvider>
 );
 
 export default App;

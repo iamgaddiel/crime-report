@@ -1,57 +1,72 @@
-import MessageListItem from '../components/MessageListItem';
+import { CrimeList } from './../components/CrimeList';
 import { useState } from 'react';
-import { Message, getMessages } from '../data/messages';
 import {
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonFabList,
   IonHeader,
-  IonList,
+  IonIcon,
   IonPage,
-  IonRefresher,
-  IonRefresherContent,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
-  IonToolbar,
-  useIonViewWillEnter
+  IonToolbar
 } from '@ionic/react';
 import './Home.css';
+import { add, book, person } from 'ionicons/icons';
+import Person from '../assets/images/no_match_illustration_v3_darkmode.svg'
+import MissingPeopleList from './MissingPeopleLIst';
+
 
 const Home: React.FC = () => {
+  const [option, setOption] = useState("crimes")
 
-  const [messages, setMessages] = useState<Message[]>([]);
-
-  useIonViewWillEnter(() => {
-    const msgs = getMessages();
-    setMessages(msgs);
-  });
-
-  const refresh = (e: CustomEvent) => {
-    setTimeout(() => {
-      e.detail.complete();
-    }, 3000);
-  };
+  const displayOptions = () => {
+    switch (option) {
+      case "crimes":
+        return <CrimeList Person={Person} />
+      case "missing_people":
+        return <MissingPeopleList Person={Person} />
+    }
+  }
 
   return (
     <IonPage id="home-page">
-      <IonHeader>
+      <IonHeader className='ion-no-border'>
         <IonToolbar>
-          <IonTitle>Inbox</IonTitle>
+          <IonTitle color='secondary'>Crime Report App</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonRefresher slot="fixed" onIonRefresh={refresh}>
-          <IonRefresherContent></IonRefresherContent>
-        </IonRefresher>
 
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">
-              Inbox
-            </IonTitle>
-          </IonToolbar>
-        </IonHeader>
+      <IonContent fullscreen className='ion-padding'>
 
-        <IonList>
-          {messages.map(m => <MessageListItem key={m.id} message={m} />)}
-        </IonList>
+        <IonFab vertical='bottom' horizontal='end'>
+          <IonFabButton color="secondary">
+            <IonIcon icon={add} color='light' />
+          </IonFabButton>
+          <IonFabList side='top' color='primary'>
+            {/* Report  A missing Person */}
+            <IonFabButton color="secondary" routerDirection='forward' routerLink='/add/person/'>
+              <IonIcon icon={person} color='light' />
+            </IonFabButton>
+            <IonFabButton color="secondary" routerDirection='forward' routerLink='/add/crime'>
+              <IonIcon icon={book} color='light' />
+            </IonFabButton>
+          </IonFabList>
+        </IonFab>
+
+        <section className='ion-padding'>
+          <IonSegment value={option} onIonChange={e => setOption(e.detail.value as string)}>
+            <IonSegmentButton color='secondary' value='crimes' >Crimes</IonSegmentButton>
+            <IonSegmentButton color='secondary' value='missing_people'>Missing People </IonSegmentButton>
+          </IonSegment>
+        </section>
+
+        {
+          displayOptions()
+        }
+
       </IonContent>
     </IonPage>
   );

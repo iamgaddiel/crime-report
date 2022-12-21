@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "crime report",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
